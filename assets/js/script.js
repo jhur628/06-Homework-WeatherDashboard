@@ -131,6 +131,9 @@ function fetchData() {
                         forecastCard.appendChild(forecastHumidity);
 
                         // Append wind speed
+                        var forecastWind = document.createElement("p");
+                        forecastWind.textContent = "Wind speed: " + forecastData.list[i].wind.speed + " MPH";
+                        forecastCard.appendChild(forecastWind);
                     }
                 })
             
