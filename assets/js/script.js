@@ -13,11 +13,13 @@ function convertFarenheit(temperature) {
     return ((temperature - 273.15) * 9 / 5 + 32).toFixed()
 }
 
+
+
 // Create a function to fetch data from weather API and append specific data
 function fetchData() {
     var cityName = cityInput.value;
     var apiKey = "462736f7423dc6ea90662fdc8ba4ec01"
-    var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&appid=' + apiKey
+    var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&appid=' + apiKey;
 
     fetch(requestUrl)
         .then(function (response) {
@@ -57,11 +59,40 @@ function fetchData() {
             currentWind.textContent = "Wind speed: " + weatherData.wind.speed + " MPH";
             currentWeather.appendChild(currentWind);
 
+            // Create a function to get UV index
+            // Create variables for longitude and latitude
+            var longitude = weatherData.coord.lon;
+            var latitude = weatherData.coord.lat;
+            // Create a function to fetch UV index
+            var UVUrl = "https://api.openweathermap.org/data/2.5/uvi?appid=" + apiKey + "&lat=" + latitude + "&lon=" + longitude;
+            fetch(UVUrl)
+                .then(function (response) {
+                    return response.json()
+                })
+                .then(function(UVData) {
+                    console.log(UVData);
 
-        })
+                    var currentUV = document.createElement("p");
+                    currentUV.textContent = "UVI: ";
+                    currentWeather.appendChild(currentUV);
+
+                    spanUVI = document.createElement("span");
+                    spanUVI.textContent = UVData.value;
+                    if (UVData.value <= 2) {
+                        spanUVI.className += "btn btn-outline-success";
+                    };
+                    if (UVData.value > 2 && UVData.value <= 5) {
+                        spanUVI.className += "btn btn-outline-warning";
+                    };
+                    if (UVData.value > 5) {
+                        spanUVI.className += "btn btn-outline-danger";
+                    };
+                    currentUV.appendChild(spanUVI);
+                })
 
     
+})
 };
 
 // Create a click listener to get city from input value
-citySubmit.addEventListener("click", fetchData)
+citySubmit.addEventListener("click", fetchData);
