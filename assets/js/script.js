@@ -32,8 +32,8 @@ function fetchData() {
             var iconUrl = "http://openweathermap.org/img/w/" + icon + ".png";
 
             // Append the city's name and current date
-            var nameDate = document.createElement("p")
-            nameDate.id = "nameDate"
+            var nameDate = document.createElement("p");
+            nameDate.id = "nameDate";
             nameDate.textContent = cityName + " " + today + " ";
             currentWeather.appendChild(nameDate);
             
@@ -43,8 +43,20 @@ function fetchData() {
             nameDate.appendChild(currentIcon);
 
             // Append temperature in farenheit
-            var currentTemp = convertFarenheit(weatherData.main.temp);
-            
+            var currentTemp = document.createElement("p");
+            currentTemp.textContent = "Current temperature: " + convertFarenheit(weatherData.main.temp) + " \u00B0F";
+            currentWeather.appendChild(currentTemp);
+
+            // Append humidity
+            var currentHumidity = document.createElement("p");
+            currentHumidity.textContent = "Humidity: " + weatherData.main.humidity + "%";
+            currentWeather.appendChild(currentHumidity);
+
+            // Append wind speed
+            var currentWind = document.createElement("p");
+            currentWind.textContent = "Wind speed: " + weatherData.wind.speed + " MPH";
+            currentWeather.appendChild(currentWind);
+
 
         })
 

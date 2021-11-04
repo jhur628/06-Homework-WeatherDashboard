@@ -12,6 +12,10 @@
 
 #inputButton {
     display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+    
 }
 
 #currentWeather {
@@ -19,8 +23,9 @@
     flex-direction: column;
     align-content: center;
     justify-content: center;
+    border: solid black 1px;
 }
 
 img {
-    width: 50px;
+    width: 35px;
 }
