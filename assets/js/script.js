@@ -4,7 +4,8 @@ var cityHistory = [];
 // Create variable that select elements on the HTML file
 var cityInput = document.querySelector("#cityInput");
 var citySubmit = document.querySelector("#citySubmit");
-var currentWeather = document.querySelector("#currentWeather")
+var currentWeather = document.querySelector("#currentWeather");
+var forecast = document.querySelector("#forecast");
 
 // Display stored history
 
@@ -63,7 +64,7 @@ function fetchData() {
             // Create variables for longitude and latitude
             var longitude = weatherData.coord.lon;
             var latitude = weatherData.coord.lat;
-            // Create a function to fetch UV index
+            // fetch UV index data
             var UVUrl = "https://api.openweathermap.org/data/2.5/uvi?appid=" + apiKey + "&lat=" + latitude + "&lon=" + longitude;
             fetch(UVUrl)
                 .then(function (response) {
@@ -72,6 +73,7 @@ function fetchData() {
                 .then(function(UVData) {
                     console.log(UVData);
 
+                    // append UV index with span to allow color change
                     var currentUV = document.createElement("p");
                     currentUV.textContent = "UVI: ";
                     currentWeather.appendChild(currentUV);
@@ -88,9 +90,50 @@ function fetchData() {
                         spanUVI.className += "btn btn-outline-danger";
                     };
                     currentUV.appendChild(spanUVI);
+                });
+            
+            // fetch forecast data
+            var forecastUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&appid=" + apiKey;
+            fetch(forecastUrl)
+                .then(function (response) {
+                    return response.json()
                 })
+                .then(function(forecastData) {
+                    console.log(forecastData);
 
-    
+                    // Create a for loop for data
+                    for (i = 0; i < 5; i++) {
+                        // Create the cards for each forecast day
+                        var forecastCard = document.createElement("div");
+                        forecastCard.className += "card";
+                        forecast.appendChild(forecastCard);
+
+                        // Append dates of 5 day forecast
+                        var forecastDate = document.createElement("p")
+                        forecastDate.textContent = moment().add(i + 1, "days").format("MMMM Do, YYYY");
+                        forecastCard.appendChild(forecastDate);
+
+                        // Append icons of 5 day forecast
+                        var iconForecast = forecastData.list[i].weather[0].icon;
+                        var iconForecastUrl = "http://openweathermap.org/img/w/" + iconForecast + ".png"
+                        var forecastIcon = document.createElement("img");
+                        forecastIcon.src = iconForecastUrl;
+                        forecastCard.appendChild(forecastIcon);
+
+                        // Append temperature
+                        var forecastTemperature = document.createElement("p");
+                        forecastTemperature.textContent = "Temperature: " + convertFarenheit(forecastData.list[i].main.temp) + " \u00B0F";
+                        forecastCard.appendChild(forecastTemperature);
+
+                        // Append humidity
+                        var forecastHumidity = document.createElement("p");
+                        forecastHumidity.textContent = "Humidity: " + forecastData.list[i].main.humidity + "%"
+                        forecastCard.appendChild(forecastHumidity);
+
+                        // Append wind speed
+                    }
+                })
+            
 })
 };
 

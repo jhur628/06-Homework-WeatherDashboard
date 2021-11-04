@@ -29,3 +29,10 @@
 img {
     width: 35px;
 }
+
+#forecast {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-content: center;
+}
