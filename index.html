@@ -4,16 +4,38 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
+        <title>Weather Dashboard</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="assets/css/style.css">
     </head>
     <body>
-        <!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+        <div class="container-fluid">
+            <div class="jumbotron">
+                <p class="header">Weather Dashboard</p>
+            </div>
+
+            <div class="row">
+                <div id="inputButton" class="row col-xl-3 col-lg-3 col-md-3 col-sm-12">
+                    <!-- City goes in the input field and submit button is pressed -->
+                    <input id="cityInput" type="test" placeholder="Enter city here">
+                    <button id="citySubmit" type="submit">Submit</button>
+                    <ul id="cityHistory">
+                        <!-- Stored city history goes here -->
+                    </ul>
+                </div>
+
+                <div id="currentWeather" class="row col-xl-9 col-lg-9 col-md-9 col-sm-12">
+                    <!-- Current weather goes in here -->
+                </div>
+            </div>
+            <div id="forecast">
+                <!-- 5 day forecast goes in here -->
+            </div>
+        </div>
         
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
         <script src="assets/js/script.js"></script>
     </body>
 </html>
