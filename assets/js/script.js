@@ -14,7 +14,7 @@ if (JSON.parse(localStorage.getItem('cityHistory')) !== null) {
 };
 
 function getItems() {
-    
+
     for (i = 0; i < cityHistory.length; i++) {
         var buttonItem = cityHistory[i];
 
@@ -38,24 +38,24 @@ function fetchData() {
     // var removeDivEl = document.querySelector("#removableDiv")
     // removeDivEl.remove();
 
+    currentWeather.innerHTML = "";
+
     var cityName = cityInput.value;
     var apiKey = "462736f7423dc6ea90662fdc8ba4ec01"
     var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&appid=' + apiKey;
 
+    
+
     // city is added to local storage
     cityHistory.push(cityName);
     localStorage.setItem("cityHistory", JSON.stringify(cityHistory));
-
-    // Append city history as buttons
-    for (i = 0; i < cityHistory.length; i++) {
-        var buttonItem = cityHistory[i];
-
-        var cityHistoryName = document.createElement("button");
-        cityHistoryName.type = "submit";
-        cityHistoryName.id = "historyButton";
-        cityHistoryName.textContent = buttonItem;
-        cityHistoryEl.appendChild(cityHistoryName);
-    };
+    
+    // Append last searched city name to history
+    var cityHistoryName = document.createElement("button");
+    cityHistoryName.type = "submit";
+    cityHistoryName.id = "historyButton";
+    cityHistoryName.textContent = cityName;
+    cityHistoryEl.appendChild(cityHistoryName);
     
     fetch(requestUrl)
         .then(function (response) {
@@ -69,16 +69,11 @@ function fetchData() {
             var icon = weatherData.weather[0].icon;
             var iconUrl = "http://openweathermap.org/img/w/" + icon + ".png";
 
-            // Append a removable div
-            var removeDiv = document.createElement("div");
-            removeDiv.id = "removableDiv";
-            currentWeather.appendChild(removeDiv)
-
             // Append the city's name and current date
             var nameDate = document.createElement("p");
             nameDate.id = "nameDate";
             nameDate.textContent = cityName + " " + today + " ";
-            removeDiv.appendChild(nameDate);
+            currentWeather.appendChild(nameDate);
             
             // Append weather icon
             var currentIcon = document.createElement("img");
@@ -88,17 +83,17 @@ function fetchData() {
             // Append temperature in farenheit
             var currentTemp = document.createElement("p");
             currentTemp.textContent = "Current temperature: " + convertFarenheit(weatherData.main.temp) + " \u00B0F";
-            removeDiv.appendChild(currentTemp);
+            currentWeather.appendChild(currentTemp);
 
             // Append humidity
             var currentHumidity = document.createElement("p");
             currentHumidity.textContent = "Humidity: " + weatherData.main.humidity + "%";
-            removeDiv.appendChild(currentHumidity);
+            currentWeather.appendChild(currentHumidity);
 
             // Append wind speed
             var currentWind = document.createElement("p");
             currentWind.textContent = "Wind speed: " + weatherData.wind.speed + " MPH";
-            removeDiv.appendChild(currentWind);
+            currentWeather.appendChild(currentWind);
 
             // Create a function to get UV index
             // Create variables for longitude and latitude
@@ -116,7 +111,7 @@ function fetchData() {
                     // append UV index with span to allow color change
                     var currentUV = document.createElement("p");
                     currentUV.textContent = "UVI: ";
-                    removeDiv.appendChild(currentUV);
+                    currentWeather.appendChild(currentUV);
 
                     spanUVI = document.createElement("span");
                     spanUVI.textContent = UVData.value;
@@ -140,6 +135,8 @@ function fetchData() {
                 })
                 .then(function(forecastData) {
                     console.log(forecastData);
+
+                    forecast.innerHTML = "";
 
                     // Create a for loop for data
                     for (i = 0; i < 5; i++) {
@@ -186,3 +183,5 @@ function fetchData() {
 citySubmit.addEventListener("click", function() {
     fetchData();
 });
+
+// Create a click listener function for history buttons
