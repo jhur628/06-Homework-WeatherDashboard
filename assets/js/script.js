@@ -6,21 +6,44 @@ var cityInput = document.querySelector("#cityInput");
 var citySubmit = document.querySelector("#citySubmit");
 var currentWeather = document.querySelector("#currentWeather");
 var forecast = document.querySelector("#forecast");
+var cityHistoryEl = document.querySelector("#cityHistory");
 
 // Display stored history
+if (JSON.parse(localStorage.getItem('cityHistory')) !== null) {
+    cityHistory = JSON.parse(localStorage.getItem("cityHistory"));
+};
 
 // Create a function to convert temperature to Farenheit
 function convertFarenheit(temperature) {
     return ((temperature - 273.15) * 9 / 5 + 32).toFixed()
 }
 
-
-
 // Create a function to fetch data from weather API and append specific data
 function fetchData() {
+    // var removeDivEl = document.querySelector("#removableDiv")
+    // removeDivEl.remove();
+
     var cityName = cityInput.value;
     var apiKey = "462736f7423dc6ea90662fdc8ba4ec01"
     var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&appid=' + apiKey;
+
+    // city is added to local storage
+    cityHistory.push(cityName);
+    localStorage.setItem("cityHistory", JSON.stringify(cityHistory));
+
+    // Append city history as buttons
+    for (i = 0; i < cityHistory.length; i++) {
+        var buttonItem = cityHistory[i];
+
+        var cityHistoryName = document.createElement("button");
+        cityHistoryName.type = "submit";
+        cityHistoryName.id = "historyButton";
+        cityHistoryName.textContent = buttonItem;
+        cityHistoryEl.appendChild(cityHistoryName);
+    }
+    
+
+
 
     fetch(requestUrl)
         .then(function (response) {
@@ -34,11 +57,16 @@ function fetchData() {
             var icon = weatherData.weather[0].icon;
             var iconUrl = "http://openweathermap.org/img/w/" + icon + ".png";
 
+            // Append a removable div
+            var removeDiv = document.createElement("div");
+            removeDiv.id = "removableDiv";
+            currentWeather.appendChild(removeDiv)
+
             // Append the city's name and current date
             var nameDate = document.createElement("p");
             nameDate.id = "nameDate";
             nameDate.textContent = cityName + " " + today + " ";
-            currentWeather.appendChild(nameDate);
+            removeDiv.appendChild(nameDate);
             
             // Append weather icon
             var currentIcon = document.createElement("img");
@@ -48,17 +76,17 @@ function fetchData() {
             // Append temperature in farenheit
             var currentTemp = document.createElement("p");
             currentTemp.textContent = "Current temperature: " + convertFarenheit(weatherData.main.temp) + " \u00B0F";
-            currentWeather.appendChild(currentTemp);
+            removeDiv.appendChild(currentTemp);
 
             // Append humidity
             var currentHumidity = document.createElement("p");
             currentHumidity.textContent = "Humidity: " + weatherData.main.humidity + "%";
-            currentWeather.appendChild(currentHumidity);
+            removeDiv.appendChild(currentHumidity);
 
             // Append wind speed
             var currentWind = document.createElement("p");
             currentWind.textContent = "Wind speed: " + weatherData.wind.speed + " MPH";
-            currentWeather.appendChild(currentWind);
+            removeDiv.appendChild(currentWind);
 
             // Create a function to get UV index
             // Create variables for longitude and latitude
@@ -76,7 +104,7 @@ function fetchData() {
                     // append UV index with span to allow color change
                     var currentUV = document.createElement("p");
                     currentUV.textContent = "UVI: ";
-                    currentWeather.appendChild(currentUV);
+                    removeDiv.appendChild(currentUV);
 
                     spanUVI = document.createElement("span");
                     spanUVI.textContent = UVData.value;
@@ -137,8 +165,12 @@ function fetchData() {
                     }
                 })
             
+            // remove input value
+            cityInput.value = "";
 })
 };
 
 // Create a click listener to get city from input value
-citySubmit.addEventListener("click", fetchData);
+citySubmit.addEventListener("click", function() {
+    fetchData();
+});

@@ -56,3 +56,10 @@ img {
     border-radius: 10px;
     background-color: rgb(4, 177, 177);
 }
+
+#cityHistory {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 15px;
+}
