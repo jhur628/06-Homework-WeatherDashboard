@@ -8,10 +8,25 @@ var currentWeather = document.querySelector("#currentWeather");
 var forecast = document.querySelector("#forecast");
 var cityHistoryEl = document.querySelector("#cityHistory");
 
-// Display stored history
+// Display stored history as buttons
 if (JSON.parse(localStorage.getItem('cityHistory')) !== null) {
     cityHistory = JSON.parse(localStorage.getItem("cityHistory"));
 };
+
+function getItems() {
+    
+    for (i = 0; i < cityHistory.length; i++) {
+        var buttonItem = cityHistory[i];
+
+        var cityHistoryName = document.createElement("button");
+        cityHistoryName.type = "submit";
+        cityHistoryName.id = "historyButton";
+        cityHistoryName.textContent = buttonItem;
+        cityHistoryEl.appendChild(cityHistoryName);
+    };
+};
+
+getItems();
 
 // Create a function to convert temperature to Farenheit
 function convertFarenheit(temperature) {
@@ -40,11 +55,8 @@ function fetchData() {
         cityHistoryName.id = "historyButton";
         cityHistoryName.textContent = buttonItem;
         cityHistoryEl.appendChild(cityHistoryName);
-    }
+    };
     
-
-
-
     fetch(requestUrl)
         .then(function (response) {
             return response.json()
