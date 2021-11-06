@@ -29,9 +29,14 @@ When a city is searched, a button with the city name is made. This is the user's
 
 ## Links
 
-GitHub Repository: [https://github.com/jhur628/05-Homework-WorkDayPlanner](https://github.com/jhur628/05-Homework-WorkDayPlanner)
+GitHub Repository: [https://github.com/jhur628/06-Homework-WeatherDashboard](https://github.com/jhur628/06-Homework-WeatherDashboard)
 
-Deployed Application: [https://jhur628.github.io/05-Homework-WorkDayPlanner/](https://jhur628.github.io/05-Homework-WorkDayPlanner/)
+Deployed Application: [https://jhur628.github.io/06-Homework-WeatherDashboard/](https://jhur628.github.io/06-Homework-WeatherDashboard//)
 
 ## Other Comments
 
+This was a great assignment for helping me understand how to use APIs, especially the Open Weather Map API. I feel there is still a lot for me to learn in terms of API. I have tried with my project team to figure out how to use other APIs, and it seems this assignment was just the tip of the iceberg.
+
+I was able to figure things out on my own for the most part, but I attended one study group, and my peers were able to help me a lot, especially in one particular concept I could not figure out. I was able to figure it out with their help. As always, I feel very fortunate to be part of this class.
+
+Enjoy.
