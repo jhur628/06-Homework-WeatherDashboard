@@ -13,19 +13,28 @@ if (JSON.parse(localStorage.getItem('cityHistory')) !== null) {
     cityHistory = JSON.parse(localStorage.getItem("cityHistory"));
 };
 
+// funtions to display city search history
 function getItems() {
-
     for (i = 0; i < cityHistory.length; i++) {
-        var buttonItem = cityHistory[i];
-
-        var cityHistoryName = document.createElement("button");
-        cityHistoryName.type = "submit";
-        cityHistoryName.id = "historyButton";
-        cityHistoryName.textContent = buttonItem;
-        cityHistoryEl.appendChild(cityHistoryName);
+        var cityButton = document.createElement("button");
+        var buttonName = cityHistory[i];
+        cityButton.textContent = buttonName;
+        cityHistoryEl.prepend(cityButton);
+        // Click function to use click city from history as target of search in fetchData
+        cityButton.addEventListener("click", function(event) {
+            event.preventDefault();
+            pickHistory(this);
+        });
+        function pickHistory(target) {
+            var historyCity = target.textContent;
+            fetchData(historyCity);
+            cityHistoryEl.removeChild(target);
+        }
     };
+   
 };
 
+// invoke function
 getItems();
 
 // Create a function to convert temperature to Farenheit
@@ -34,29 +43,14 @@ function convertFarenheit(temperature) {
 }
 
 // Create a function to fetch data from weather API and append specific data
-function fetchData() {
-    // var removeDivEl = document.querySelector("#removableDiv")
-    // removeDivEl.remove();
-
+function fetchData(historyCity) {
+    // remove previous weather element
     currentWeather.innerHTML = "";
 
-    var cityName = cityInput.value;
+    var cityName = cityInput.value || historyCity
     var apiKey = "462736f7423dc6ea90662fdc8ba4ec01"
     var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&appid=' + apiKey;
 
-    
-
-    // city is added to local storage
-    cityHistory.push(cityName);
-    localStorage.setItem("cityHistory", JSON.stringify(cityHistory));
-    
-    // Append last searched city name to history
-    var cityHistoryName = document.createElement("button");
-    cityHistoryName.type = "submit";
-    cityHistoryName.id = "historyButton";
-    cityHistoryName.textContent = cityName;
-    cityHistoryEl.appendChild(cityHistoryName);
-    
     fetch(requestUrl)
         .then(function (response) {
             return response.json()
@@ -172,7 +166,34 @@ function fetchData() {
                         forecastWind.textContent = "Wind speed: " + forecastData.list[i].wind.speed + " MPH";
                         forecastCard.appendChild(forecastWind);
                     }
+                    
                 })
+            // Prepends city into history
+            cityButton = document.createElement("button");
+            var buttonName = weatherData.name;
+            cityButton.textContent = buttonName;
+            
+            cityHistoryEl.prepend(cityButton);
+            // Pushes city to local storage
+            var checkHistory = cityHistory.includes(buttonName);
+            if (checkHistory == true) {
+                return;
+            } else {
+                cityHistory.push(buttonName);
+                localStorage.setItem("cityHistory", JSON.stringify(cityHistory));
+                console.log(cityButton)
+            }
+            // Click function for prepended city to be target for fetchData
+            cityButton.addEventListener("click", function(event) {
+                event.preventDefault();
+                pickHistory(this);
+            })
+            function pickHistory(target) {
+                var historyCity = target.textContent;
+                console.log(historyCity);
+                fetchData(historyCity);
+                cityHistoryEl.removeChild(target);
+            }
             
             // remove input value
             cityInput.value = "";
@@ -183,5 +204,3 @@ function fetchData() {
 citySubmit.addEventListener("click", function() {
     fetchData();
 });
-
-// Create a click listener function for history buttons
